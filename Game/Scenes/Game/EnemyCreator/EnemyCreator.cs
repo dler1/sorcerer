@@ -8,21 +8,19 @@ using Game.Scripts.Helpers;
 
 public class EnemyCreator : Node2D
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
-    private PackedScene slime;
-
+    private List<PackedScene> enemiesToSpawn;
     private int enemies = 0;
     private float waiter = 0;
 
-    // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        slime = SceneLoader.Load<Slime>();
+        enemiesToSpawn = new()
+        {
+            SceneLoader.Load<Slime>(),
+            SceneLoader.Load<EnchantedHuman>()
+        };
     }
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
         if (waiter > 0)
@@ -30,16 +28,17 @@ public class EnemyCreator : Node2D
             waiter -= delta;
         }
 
-        if (enemies < 1)
+        if (enemies < 20)
         {
-            var newEnemy = slime.Instance<Slime>();
+            var newEnemy = enemiesToSpawn[Randomizer.UpTo(enemiesToSpawn.Count)].Instance<Node2D>();
             AddChild(newEnemy);
-            newEnemy.Position =GeneratePosition();
-            waiter = 1;
+            newEnemy.Position = GeneratePosition();
+            waiter = .8f;
             enemies++;
-            newEnemy.OnDie += EnemyDie;
+            ((IDamagable) newEnemy).OnDie += EnemyDie;
         }
     }
+
 
     private Vector2 GeneratePosition()
     {
@@ -60,10 +59,9 @@ public class EnemyCreator : Node2D
 
     private void EnemyDie(IDamagable damagable)
     {
-        var node = (Node2D)damagable;
+        var node = (Node2D) damagable;
         damagable.OnDie -= EnemyDie;
         node.QueueFree();
         enemies--;
-
     }
 }

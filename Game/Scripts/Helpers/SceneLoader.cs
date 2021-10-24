@@ -9,6 +9,7 @@ namespace Game.Scripts.Helpers
         private static readonly Dictionary<Type, string> paths = new()
         {
             [typeof(Slime)] = "res://Scenes/Enemies/Slime/Slime.tscn",
+            [typeof(EnchantedHuman)] = "res://Scenes/Enemies/EnchantedHuman/EnchantedHuman.tscn",
             [typeof(Fireball)] = "res://Scenes/Skills/Fireball/Fireball.tscn"
         };
 

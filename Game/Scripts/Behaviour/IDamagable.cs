@@ -6,7 +6,7 @@ namespace Game.Scripts.Behaviour
     {
         public event Action<IDamagable> OnDie;
 
-        public void Damage();
+        public void DealDamage(Damage damage);
 
 
     }

@@ -8,12 +8,13 @@ public class Slime : KinematicBody2D, IDamagable
 {
     private Player player;
     private float speed = 40;
+    private int health = 1;
     public event Action<IDamagable> OnDie;
 
-    public void Damage()
+    public void DealDamage(Damage damage)
     {
-        OnDie?.Invoke(this);
-
+        health -= damage.Amount;
+        if (health <= 0) OnDie?.Invoke(this);
     }
 
     public override void _Ready()
@@ -27,7 +28,4 @@ public class Slime : KinematicBody2D, IDamagable
         var direction = GlobalPosition.DirectionTo(player.GlobalPosition);
         MoveAndSlide(speed * direction);
     }
-
- 
-
 }

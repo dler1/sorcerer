@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Printing;
+using Game.Scripts.Behaviour;
 using Game.Scripts.Helpers;
 using Godot;
 
@@ -8,8 +9,9 @@ namespace Game.Scripts.Weapons
     {
         private PackedScene fireball;
         private Viewport root;
-        private float cooldown = .5f; 
+        private float cooldown = .5f;
         private float currentCooldown;
+        private Damage damage = Damage.Fire(1);
 
         public void Attack(Player player)
         {
@@ -29,7 +31,6 @@ namespace Game.Scripts.Weapons
         {
             root = player.GetTree().Root;
             fireball = SceneLoader.Load<Fireball>();
-            
         }
 
         public void Update(Player player, float delta)
