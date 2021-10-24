@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using Game.Scripts.Behaviour;
 using Game.Scripts.Extensions;
 using Game.Scripts.Helpers;
 
@@ -11,7 +13,7 @@ public class EnemyCreator : Node2D
     // private string b = "text";
     private PackedScene slime;
 
-    private List<Slime> enemies = new();
+    private int enemies = 0;
     private float waiter = 0;
 
     // Called when the node enters the scene tree for the first time.
@@ -28,13 +30,40 @@ public class EnemyCreator : Node2D
             waiter -= delta;
         }
 
-        if (enemies.Count < 1)
+        if (enemies < 1)
         {
             var newEnemy = slime.Instance<Slime>();
             AddChild(newEnemy);
-            Position = GetTree().Root.FindChildByType<Player>().Position + new Vector2(32, 64);
-            enemies.Add(newEnemy);
+            newEnemy.Position =GeneratePosition();
             waiter = 1;
+            enemies++;
+            newEnemy.OnDie += EnemyDie;
         }
+    }
+
+    private Vector2 GeneratePosition()
+    {
+        var room = GetTree().Root.FindChildByType<Room>();
+        var player = GetTree().Root.FindChildByType<Player>();
+        while (true)
+        {
+            var index = Randomizer.UpTo(room.Spawns.Count);
+            var position = room.Spawns[index];
+
+            var distance = position.DistanceTo(player.Position);
+            if (distance > 2)
+            {
+                return position;
+            }
+        }
+    }
+
+    private void EnemyDie(IDamagable damagable)
+    {
+        var node = (Node2D)damagable;
+        damagable.OnDie -= EnemyDie;
+        node.QueueFree();
+        enemies--;
+
     }
 }

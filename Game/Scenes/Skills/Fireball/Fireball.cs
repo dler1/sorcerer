@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Game.Scripts.Behaviour;
 using Game.Scripts.Consts;
 
 public class Fireball : KinematicBody2D
@@ -16,15 +17,17 @@ public class Fireball : KinematicBody2D
 	public void SetDirection(Vector2 direction)
 	{
 		velocity = speed * direction;
+		// var rot = Vector2.Up.AngleTo(direction);
+		// Rotate(rot);
+		LookAt(direction);
 	}
 
 	public override void _PhysicsProcess(float delta)
 	{
 		var collision = MoveAndCollide(velocity * delta);
-		if (collision?.Collider is Node2D nd && nd.HasMeta(MetaTraits.Damagable))
+		if (collision?.Collider is IDamagable damagable)
 		{
-			GD.Print("DMG!");
-			nd.QueueFree();
+			damagable.Damage();
 		}
 
 		if (collision?.Collider != null)

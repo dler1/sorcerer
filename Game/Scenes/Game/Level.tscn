@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scenes/Charaters/Player/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/Environment/Room.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Environment/Room/Room.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Game/EnemyCreator/EnemyCreator.tscn" type="PackedScene" id=3]
 
 [node name="Level" type="Node2D"]

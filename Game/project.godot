@@ -43,6 +43,11 @@ BaseAttack={
  ]
 }
 
+[mono]
+
+debugger_agent/wait_for_debugger=true
+debugger_agent/wait_timeout=5000
+
 [physics]
 
 common/enable_pause_aware_picking=true
